@@ -21,16 +21,19 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: npm install, build, and test
+      - name: Install dependencies and prepare build
         run: |
           npm install
-          npm start
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: |
+            index.js
+            package.json
+            package-lock.json
+            node_modules/
 
   deploy:
     runs-on: ubuntu-latest
@@ -45,7 +48,7 @@ jobs:
         with:
           name: node-app
       
-      - name: 'Deploy to Azure Web App'
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
